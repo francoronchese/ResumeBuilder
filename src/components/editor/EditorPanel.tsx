@@ -10,7 +10,6 @@ import {
   Code,
   FolderKanban,
 } from "lucide-react";
-import { useState } from "react";
 import FontSelector from "./settings/FontSelector";
 import ColorSchemeSelector from "./settings/ColorSchemeSelector";
 import SectionManager from "./settings/SectionManager";
@@ -20,30 +19,30 @@ import ExperienceForm from "./content/ExperienceForm";
 import EducationForm from "./content/EducationForm";
 import SkillsForm from "./content/SkillsForm";
 import ProjectsForm from "./content/ProjectsForm";
-import type {
-  Font,
-  ColorScheme,
-  Section,
-  PersonalInfo,
-  WorkExperience,
-  Education,
-  Skill,
-  Project,
-} from "../../types/types";
-import { DEFAULT_SECTIONS, DEFAULT_PERSONAL_INFO } from "../../constants";
+import { useResumeStore } from "../../store/store";
 
 export default function EditorPanel() {
-  const [font, setFont] = useState<Font>("Inter");
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("emerald");
-  const [sections, setSections] = useState<Section[]>(DEFAULT_SECTIONS);
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(
-    DEFAULT_PERSONAL_INFO,
-  );
-  const [summary, setSummary] = useState("");
-  const [experience, setExperience] = useState<WorkExperience[]>([]);
-  const [education, setEducation] = useState<Education[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
+  // Read state and actions from the global store
+  const {
+    font,
+    setFont,
+    colorScheme,
+    setColorScheme,
+    sections,
+    setSections,
+    personalInfo,
+    setPersonalInfo,
+    summary,
+    setSummary,
+    experience,
+    setExperience,
+    education,
+    setEducation,
+    skills,
+    setSkills,
+    projects,
+    setProjects,
+  } = useResumeStore();
 
   return (
     <div className="grid gap-6">

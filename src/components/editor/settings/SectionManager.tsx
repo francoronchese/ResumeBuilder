@@ -1,5 +1,4 @@
 // Section manager component — handles section reordering and visibility toggling
-import { useState} from "react";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable, isSortable } from "@dnd-kit/react/sortable";
 import type { Section } from "../../../types/types";
@@ -49,15 +48,11 @@ export default function SectionManager({
   sections,
   onSectionsChange,
 }: SectionManagerProps) {
-  // State to manage section order and visibility
-  const [items, setItems] = useState<Section[]>(sections);
-
   // Updates section visibility and notifies parent
   const handleToggle = (id: string, enabled: boolean) => {
-    const updated = items.map((section) =>
+    const updated = sections.map((section) =>
       section.id === id ? { ...section, enabled } : section,
     );
-    setItems(updated);
     onSectionsChange(updated);
   };
 
@@ -74,17 +69,16 @@ export default function SectionManager({
 
           if (initialIndex !== index) {
             // Create a new array and move the dragged item to its new position
-            const newItems = [...items];
+            const newItems = [...sections];
             const [removed] = newItems.splice(initialIndex, 1);
             newItems.splice(index, 0, removed);
             onSectionsChange(newItems);
-            setItems(newItems);
           }
         }
       }}
     >
       <div className="grid gap-2">
-        {items.map((section, index) => (
+        {sections.map((section, index) => (
           <SortableItem
             key={section.id}
             section={section}
