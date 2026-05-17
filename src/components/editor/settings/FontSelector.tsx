@@ -24,7 +24,7 @@ export default function FontSelector({
         <button
           key={font.value}
           onClick={() => onFontChange(font.value)}
-          className={`p-3 rounded-lg border-2 text-left transition-all ${
+          className={`p-3 rounded-lg border-2 text-left transition-all cursor-pointer ${
             selected === font.value
               ? "border-amber-500"
               : "border-gray-200 hover:border-gray-300"

@@ -94,5 +94,4 @@ export type Project = {
   url?: string;
   startDate?: string;
   endDate?: string;
-  highlights: string;
 };

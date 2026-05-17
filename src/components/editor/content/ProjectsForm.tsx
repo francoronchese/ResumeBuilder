@@ -1,6 +1,7 @@
 // Projects form component
-import { Trash2 } from "lucide-react";
 import TextareaField from "../ui/TextareaField";
+import RemoveButton from "../ui/RemoveButton";
+import AddButton from "../ui/AddButton";
 import type { Project } from "../../../types/types";
 import FormField from "../ui/FormField";
 
@@ -22,7 +23,6 @@ export default function ProjectsForm({
       url: "",
       startDate: "",
       endDate: "",
-      highlights: "",
     };
     onProjectsChange([...data, newProject]);
   };
@@ -96,34 +96,13 @@ export default function ProjectsForm({
             placeholder="Jan 2023"
           />
 
-          {/* Key highlights */}
-          <TextareaField
-            label="Key Highlights"
-            value={project.highlights}
-            onChange={(value) => handleChange(project.id, "highlights", value)}
-            placeholder="Key achievements and highlights of the project..."
-          />
-
           {/* Remove button */}
-          <div className="flex justify-end">
-            <button
-              onClick={() => handleRemove(project.id)}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 bg-red-100 hover:text-red-600 hover:bg-red-200 rounded-lg transition-colors cursor-pointer"
-            >
-              <Trash2 className="w-4 h-4" />
-              Remove
-            </button>
-          </div>
+          <RemoveButton onClick={() => handleRemove(project.id)} />
         </div>
       ))}
 
       {/* Add project button */}
-      <button
-        onClick={handleAdd}
-        className="w-full py-2.5 text-sm text-gray-500 border-2 border-dashed border-gray-300 hover:border-emerald-400 hover:text-emerald-600 rounded-lg transition-colors cursor-pointer"
-      >
-        + Add Project
-      </button>
+      <AddButton onClick={handleAdd} label="Add Project" />
     </div>
   );
 }

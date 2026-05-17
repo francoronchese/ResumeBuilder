@@ -1,6 +1,7 @@
 // Education form component
-import { Trash2 } from "lucide-react";
 import TextareaField from "../ui/TextareaField";
+import RemoveButton from "../ui/RemoveButton";
+import AddButton from "../ui/AddButton";
 import type { Education } from "../../../types/types";
 import FormField from "../ui/FormField";
 
@@ -127,25 +128,12 @@ export default function EducationForm({
           />
 
           {/* Remove button */}
-          <div className="flex justify-end">
-            <button
-              onClick={() => handleRemove(edu.id)}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 bg-red-100 hover:text-red-600 hover:bg-red-200 rounded-lg transition-colors cursor-pointer"
-            >
-              <Trash2 className="w-4 h-4" />
-              Remove
-            </button>
-          </div>
+          <RemoveButton onClick={() => handleRemove(edu.id)} />
         </div>
       ))}
 
       {/* Add education button */}
-      <button
-        onClick={handleAdd}
-        className="w-full py-2.5 text-sm text-gray-500 border-2 border-dashed border-gray-300 hover:border-emerald-400 hover:text-emerald-600 rounded-lg transition-colors cursor-pointer"
-      >
-        + Add Education
-      </button>
+      <AddButton onClick={handleAdd} label="Add Education" />
     </div>
   );
 }

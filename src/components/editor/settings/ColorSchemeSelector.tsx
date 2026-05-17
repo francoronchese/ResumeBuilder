@@ -23,7 +23,7 @@ export default function ColorSchemeSelector({
         <button
           key={scheme.value}
           onClick={() => onColorChange(scheme.value)}
-          className={`p-3 rounded-lg border-2 text-left transition-all ${
+          className={`p-3 rounded-lg border-2 text-left transition-all cursor-pointer ${
             selected === scheme.value
               ? "text-pink-600"
               : "border-gray-200 hover:border-gray-300"

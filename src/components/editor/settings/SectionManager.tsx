@@ -17,7 +17,7 @@ function SortableItem({ index, section, onToggle }: SortableItemsProps) {
   return (
     <div
       ref={ref}
-      className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:bg-emerald-100 transition-all"
+      className="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:bg-emerald-100 transition-all cursor-grab"
     >
       {/* Drag handle */}
       <span className="text-gray-400 cursor-grab">⠿</span>
