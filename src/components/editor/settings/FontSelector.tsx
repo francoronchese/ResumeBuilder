@@ -2,11 +2,11 @@
 import type { Font, FontOption } from "../../../types/types";
 
 const fonts: FontOption[] = [
-  { value: "Arial", label: "Arial" },
-  { value: "Georgia", label: "Georgia" },
   { value: "Inter", label: "Inter" },
-  { value: "Times New Roman", label: "Times New Roman" },
-  { value: "Verdana", label: "Verdana" },
+  { value: "Arimo", label: "Arimo" },
+  { value: "Caladea", label: "Caladea" },
+  { value: "Cabin", label: "Cabin" },
+  { value: "Merriweather", label: "Merriweather" },
 ];
 
 interface FontSelectorProps {

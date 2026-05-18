@@ -2,11 +2,11 @@
 
 // Font types
 export type Font =
-  | "Arial"
-  | "Georgia"
   | "Inter"
-  | "Times New Roman"
-  | "Verdana";
+  | "Arimo"
+  | "Caladea"
+  | "Cabin"
+  | "Merriweather";
 
 export type FontOption = {
   value: Font;

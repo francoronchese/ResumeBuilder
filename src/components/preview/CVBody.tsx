@@ -153,6 +153,8 @@ export default function CVBody({
                                 style={{
                                   color: accentColor,
                                   borderColor: accentColor,
+                                  /* Semi‑transparent background matching the PDF’s tone */
+                                  backgroundColor: `${accentColor}22`, // “22” → ≈ 13% opacity
                                 }}
                               >
                                 {skill.name}
