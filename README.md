@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# Resume Builder 📄
+Live Demo: https://ats-resume-builder-lyart.vercel.app/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A client-side resume builder designed for ATS compatibility, built with React, TypeScript and Tailwind CSS. Fill in your information, preview your CV in real time, and download it as a professional PDF directly from the browser.
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Resume Builder is a fully client-side application that allows users to create and export ATS-optimized resumes without any backend. It features a live preview panel that updates as you type, four color scheme options, five ATS-safe font choices, drag-and-drop section reordering, and PDF export powered by @react-pdf/renderer. All data is automatically saved to localStorage so nothing is lost on page refresh.
 
-## React Compiler
+## Motivation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project was built to demonstrate frontend-focused TypeScript skills including:
+- Global state management with Zustand and automatic localStorage persistence
+- Schema-driven type safety with Zod — types are inferred directly from validation schemas
+- Real-time live preview that mirrors the PDF output
+- PDF generation with ATS-safe embedded fonts and clickable hyperlinks
+- Drag-and-drop UX with @dnd-kit for section reordering
 
-## Expanding the ESLint configuration
+## Tech Stack
+- **React + TypeScript** — UI and type safety
+- **Vite** — build tool
+- **Tailwind CSS v4** — styling
+- **Zustand** — global state with persist middleware
+- **Zod** — schema validation and type inference
+- **@react-pdf/renderer** — PDF generation
+- **@dnd-kit** — drag and drop
+- **lucide-react** — icons
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
+- Fill out personal info, summary, work experience, education, skills and projects
+- Live CV preview updates in real time as you type
+- 4 color schemes: Emerald, Ruby, Sapphire, Amber
+- 5 ATS-safe fonts: Inter, Arimo, Caladea, Cabin, Merriweather
+- Reorder and toggle visibility of CV sections via drag and drop
+- Per-field validation on blur with inline error messages powered by Zod
+- Auto-save to localStorage
+- Download a PDF with embedded ATS-safe fonts and clickable hyperlinks
+- Responsive — works on mobile and desktop
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Quick Start
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
+- Node.js 18+
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/francoronchese/ResumeBuilder.git
+cd ResumeBuilder
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+The app will be available at http://localhost:5173.
