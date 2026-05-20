@@ -1,5 +1,6 @@
 // App-wide constants
-import type { Section, PersonalInfo } from "./types/types";
+import type { Section } from "./types/types";
+import type { PersonalInfo } from "./lib/schemas";
 
 export const DEFAULT_SECTIONS: Section[] = [
   { id: "summary", label: "Summary", enabled: true },

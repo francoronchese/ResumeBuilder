@@ -1,4 +1,4 @@
-import type { PersonalInfo } from "../../types/types";
+import type { PersonalInfo } from "../../lib/schemas";
 
 interface CVHeaderProps {
   personalInfo: PersonalInfo;

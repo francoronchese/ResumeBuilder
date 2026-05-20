@@ -1,9 +1,16 @@
 // Education form component
+import { useState } from "react";
 import TextareaField from "../ui/TextareaField";
 import RemoveButton from "../ui/RemoveButton";
 import AddButton from "../ui/AddButton";
-import type { Education } from "../../../types/types";
 import FormField from "../ui/FormField";
+import type { Education } from "../../../lib/schemas";
+import { educationSchema } from "../../../lib/schemas";
+
+// Error messages for a single education entry — each field can have an optional error string
+type EducationFieldErrors = Partial<Record<keyof Education, string>>;
+// Maps each education entry by its id to its field errors
+type EducationErrors = Record<string, EducationFieldErrors | undefined>;
 
 interface EducationFormProps {
   data: Education[];
@@ -14,6 +21,8 @@ export default function EducationForm({
   data,
   onEducationChange,
 }: EducationFormProps) {
+  const [errors, setErrors] = useState<EducationErrors>({});
+
   const handleAdd = () => {
     const newEducation: Education = {
       id: `education-${Date.now()}`,
@@ -32,6 +41,7 @@ export default function EducationForm({
 
   const handleRemove = (id: string) => {
     onEducationChange(data.filter((edu) => edu.id !== id));
+    setErrors((prev) => ({ ...prev, [id]: undefined }));
   };
 
   // Merges the updated field into the matching education entry — keyof Education ensures field can only be a valid key of the type
@@ -43,6 +53,23 @@ export default function EducationForm({
     onEducationChange(
       data.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu)),
     );
+
+    if (typeof value === "string" && errors[id]?.[field]) {
+      validate(id, field, value);
+    }
+  };
+
+  // Validates a single field using the Zod schema on blur —
+  // shape accesses the individual field schema, safeParse validates the value
+  const validate = (id: string, field: keyof Education, value: string) => {
+    const result = educationSchema.shape[field].safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: result.success ? undefined : result.error.issues[0].message,
+      },
+    }));
   };
 
   return (
@@ -57,6 +84,8 @@ export default function EducationForm({
             label="Institution"
             value={edu.institution}
             onChange={(value) => handleChange(edu.id, "institution", value)}
+            onBlur={(value) => validate(edu.id, "institution", value)}
+            error={errors[edu.id]?.institution}
             placeholder="MIT"
           />
           {/* Degree */}
@@ -64,6 +93,8 @@ export default function EducationForm({
             label="Degree"
             value={edu.degree}
             onChange={(value) => handleChange(edu.id, "degree", value)}
+            onBlur={(value) => validate(edu.id, "degree", value)}
+            error={errors[edu.id]?.degree}
             placeholder="Bachelor's Degree"
           />
           {/* Field of Study */}
@@ -71,6 +102,8 @@ export default function EducationForm({
             label="Field of Study"
             value={edu.fieldOfStudy}
             onChange={(value) => handleChange(edu.id, "fieldOfStudy", value)}
+            onBlur={(value) => validate(edu.id, "fieldOfStudy", value)}
+            error={errors[edu.id]?.fieldOfStudy}
             placeholder="Computer Science"
           />
           {/* Location */}
@@ -78,6 +111,8 @@ export default function EducationForm({
             label="Location"
             value={edu.location}
             onChange={(value) => handleChange(edu.id, "location", value)}
+            onBlur={(value) => validate(edu.id, "location", value)}
+            error={errors[edu.id]?.location}
             placeholder="City, Country"
           />
 
@@ -86,6 +121,8 @@ export default function EducationForm({
             label="Start Date"
             value={edu.startDate}
             onChange={(value) => handleChange(edu.id, "startDate", value)}
+            onBlur={(value) => validate(edu.id, "startDate", value)}
+            error={errors[edu.id]?.startDate}
             placeholder="Jan 2021"
           />
           {/* End Date */}

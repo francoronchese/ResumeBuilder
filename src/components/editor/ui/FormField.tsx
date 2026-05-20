@@ -3,6 +3,8 @@ interface FormFieldProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: (value: string) => void;
+  error?: string;
   placeholder?: string;
   type?: string;
 }
@@ -11,6 +13,8 @@ export default function FormField({
   label,
   value,
   onChange,
+  onBlur,
+  error,
   placeholder,
   type = "text",
 }: FormFieldProps) {
@@ -21,9 +25,15 @@ export default function FormField({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={(e) => onBlur?.(e.target.value)}
         placeholder={placeholder}
-        className="px-3 py-2 text-sm text-gray-800 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-gray-700 transition-colors"
+        className={`px-3 py-2 text-sm text-gray-800 border rounded-lg focus:outline-none transition-colors ${
+          error
+            ? "border-red-400 focus:border-red-500"
+            : "border-gray-200 focus:border-gray-500"
+        }`}
       />
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
 }

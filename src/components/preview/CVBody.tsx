@@ -1,10 +1,5 @@
-import type {
-  Section,
-  WorkExperience,
-  Education,
-  Skill,
-  Project,
-} from "../../types/types";
+import type { Section  } from "../../types/types";
+import type { WorkExperience, Education, Skill, Project } from "../../lib/schemas";
 
 interface CVBodyProps {
   accentColor: string;

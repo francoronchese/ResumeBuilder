@@ -1,9 +1,16 @@
 // Work experience form component
+import { useState } from "react";
 import TextareaField from "../ui/TextareaField";
 import RemoveButton from "../ui/RemoveButton";
 import AddButton from "../ui/AddButton";
-import type { WorkExperience } from "../../../types/types";
 import FormField from "../ui/FormField";
+import type { WorkExperience } from "../../../lib/schemas";
+import { workExperienceSchema } from "../../../lib/schemas";
+
+// Error messages for a single experience entry — each field can have an optional error string
+type ExperienceFieldErrors = Partial<Record<keyof WorkExperience, string>>;
+// Maps each experience entry by its id to its field errors
+type ExperienceErrors = Record<string, ExperienceFieldErrors | undefined>;
 
 interface ExperienceFormProps {
   data: WorkExperience[];
@@ -14,6 +21,8 @@ export default function ExperienceForm({
   data,
   onExperienceChange,
 }: ExperienceFormProps) {
+  const [errors, setErrors] = useState<ExperienceErrors>({});
+
   const handleAdd = () => {
     const newExperience: WorkExperience = {
       id: `experience-${Date.now()}`,
@@ -30,6 +39,7 @@ export default function ExperienceForm({
 
   const handleRemove = (id: string) => {
     onExperienceChange(data.filter((exp) => exp.id !== id));
+    setErrors((prev) => ({ ...prev, [id]: undefined }));
   };
 
   // Merges the updated field into the matching experience entry — keyof WorkExperience ensures field can only be a valid key of the type
@@ -41,6 +51,23 @@ export default function ExperienceForm({
     onExperienceChange(
       data.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp)),
     );
+
+    if (typeof value === "string" && errors[id]?.[field]) {
+      validate(id, field, value);
+    }
+  };
+
+  // Validates a single field using the Zod schema on blur —
+  // shape accesses the individual field schema, safeParse validates the value
+  const validate = (id: string, field: keyof WorkExperience, value: string) => {
+    const result = workExperienceSchema.shape[field].safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: result.success ? undefined : result.error.issues[0].message,
+      },
+    }));
   };
 
   return (
@@ -55,6 +82,8 @@ export default function ExperienceForm({
             label="Position"
             value={exp.position}
             onChange={(value) => handleChange(exp.id, "position", value)}
+            onBlur={(value) => validate(exp.id, "position", value)}
+            error={errors[exp.id]?.position}
             placeholder="Software Engineer"
           />
           {/* Company */}
@@ -62,6 +91,8 @@ export default function ExperienceForm({
             label="Company"
             value={exp.company}
             onChange={(value) => handleChange(exp.id, "company", value)}
+            onBlur={(value) => validate(exp.id, "company", value)}
+            error={errors[exp.id]?.company}
             placeholder="Acme Inc."
           />
           {/* Location */}
@@ -69,6 +100,8 @@ export default function ExperienceForm({
             label="Location"
             value={exp.location}
             onChange={(value) => handleChange(exp.id, "location", value)}
+            onBlur={(value) => validate(exp.id, "location", value)}
+            error={errors[exp.id]?.location}
             placeholder="City, Country"
           />
 
@@ -77,6 +110,8 @@ export default function ExperienceForm({
             label="Start Date"
             value={exp.startDate}
             onChange={(value) => handleChange(exp.id, "startDate", value)}
+            onBlur={(value) => validate(exp.id, "startDate", value)}
+            error={errors[exp.id]?.startDate}
             placeholder="Jan 2021"
           />
           {/* End Date */}
@@ -107,6 +142,8 @@ export default function ExperienceForm({
             label="Description"
             value={exp.description}
             onChange={(value) => handleChange(exp.id, "description", value)}
+            onBlur={(value) => validate(exp.id, "description", value)}
+            error={errors[exp.id]?.description}
             placeholder="Describe your role and key achievements..."
             rows={4}
           />

@@ -8,14 +8,14 @@ import {
   Font,
   Link,
 } from "@react-pdf/renderer";
+import type { Section } from "../../types/types";
 import type {
   PersonalInfo,
   WorkExperience,
   Education,
   Skill,
   Project,
-  Section,
-} from "../../types/types";
+} from "../../lib/schemas";
 
 // Register ATS-safe fonts from local files
 Font.register({

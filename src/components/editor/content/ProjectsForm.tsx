@@ -1,9 +1,16 @@
 // Projects form component
+import { useState } from "react";
 import TextareaField from "../ui/TextareaField";
 import RemoveButton from "../ui/RemoveButton";
 import AddButton from "../ui/AddButton";
-import type { Project } from "../../../types/types";
 import FormField from "../ui/FormField";
+import type { Project } from "../../../lib/schemas";
+import { projectSchema } from "../../../lib/schemas";
+
+// Error messages for a single project entry — each field can have an optional error string
+type ProjectFieldErrors = Partial<Record<keyof Project, string>>;
+// Maps each project entry by its id to its field errors
+type ProjectErrors = Record<string, ProjectFieldErrors | undefined>;
 
 interface ProjectsFormProps {
   data: Project[];
@@ -14,6 +21,8 @@ export default function ProjectsForm({
   data,
   onProjectsChange,
 }: ProjectsFormProps) {
+  const [errors, setErrors] = useState<ProjectErrors>({});
+
   const handleAdd = () => {
     const newProject: Project = {
       id: `project-${Date.now()}`,
@@ -29,6 +38,7 @@ export default function ProjectsForm({
 
   const handleRemove = (id: string) => {
     onProjectsChange(data.filter((project) => project.id !== id));
+    setErrors((prev) => ({ ...prev, [id]: undefined }));
   };
 
   // Merges the updated field into the matching project entry — keyof Project ensures field can only be a valid key of the type
@@ -38,6 +48,23 @@ export default function ProjectsForm({
         project.id === id ? { ...project, [field]: value } : project,
       ),
     );
+
+    if (errors[id]?.[field]) {
+      validate(id, field, value);
+    }
+  };
+
+  // Validates a single field using the Zod schema on blur —
+  // shape accesses the individual field schema, safeParse validates the value
+  const validate = (id: string, field: keyof Project, value: string) => {
+    const result = projectSchema.shape[field].safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: result.success ? undefined : result.error.issues[0].message,
+      },
+    }));
   };
 
   return (
@@ -52,6 +79,8 @@ export default function ProjectsForm({
             label="Project Name"
             value={project.name}
             onChange={(value) => handleChange(project.id, "name", value)}
+            onBlur={(value) => validate(project.id, "name", value)}
+            error={errors[project.id]?.name}
             placeholder="My Awesome Project"
           />
 
@@ -60,6 +89,8 @@ export default function ProjectsForm({
             label="Description"
             value={project.description}
             onChange={(value) => handleChange(project.id, "description", value)}
+            onBlur={(value) => validate(project.id, "description", value)}
+            error={errors[project.id]?.description}
             placeholder="A brief description of the project..."
           />
 
@@ -70,6 +101,8 @@ export default function ProjectsForm({
             onChange={(value) =>
               handleChange(project.id, "technologies", value)
             }
+            onBlur={(value) => validate(project.id, "technologies", value)}
+            error={errors[project.id]?.technologies}
             placeholder="React, TypeScript, Tailwind..."
           />
 

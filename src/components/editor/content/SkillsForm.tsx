@@ -1,20 +1,16 @@
 // Skills form component
+import { useState } from "react";
 import FormField from "../ui/FormField";
 import RemoveButton from "../ui/RemoveButton";
 import AddButton from "../ui/AddButton";
-import type { Skill, SkillCategory } from "../../../types/types";
+import type { Skill } from "../../../lib/schemas";
+import { skillSchema } from "../../../lib/schemas";
 
-// Available skill categories
-const SKILL_CATEGORIES: SkillCategory[] = [
-  "Programming Languages",
-  "Frameworks & Libraries",
-  "Databases",
-  "Cloud Services",
-  "Tools & DevOps",
-  "Soft Skills",
-  "Languages",
-  "Other",
-];
+// Get categories directly from the Zod schema enum
+const SKILL_CATEGORIES = skillSchema.shape.category.options;
+
+// Each skill id maps to an optional error string for the name field
+type SkillErrors = Record<string, string | undefined>;
 
 interface SkillsFormProps {
   data: Skill[];
@@ -22,6 +18,8 @@ interface SkillsFormProps {
 }
 
 export default function SkillsForm({ data, onSkillsChange }: SkillsFormProps) {
+  const [errors, setErrors] = useState<SkillErrors>({});
+
   const handleAdd = () => {
     const newSkill: Skill = {
       id: `skill-${Date.now()}`,
@@ -33,6 +31,7 @@ export default function SkillsForm({ data, onSkillsChange }: SkillsFormProps) {
 
   const handleRemove = (id: string) => {
     onSkillsChange(data.filter((skill) => skill.id !== id));
+    setErrors((prev) => ({ ...prev, [id]: undefined }));
   };
 
   // Merges the updated field into the matching skill entry — keyof Skill ensures field can only be a valid key of the type
@@ -42,6 +41,20 @@ export default function SkillsForm({ data, onSkillsChange }: SkillsFormProps) {
         skill.id === id ? { ...skill, [field]: value } : skill,
       ),
     );
+
+    if (field === "name" && errors[id]) {
+      validate(id, value);
+    }
+  };
+
+  // Validates the skill name field using the Zod schema on blur —
+  // shape accesses the individual field schema, safeParse validates the value
+  const validate = (id: string, value: string) => {
+    const result = skillSchema.shape.name.safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [id]: result.success ? undefined : result.error.issues[0].message,
+    }));
   };
 
   return (
@@ -56,6 +69,8 @@ export default function SkillsForm({ data, onSkillsChange }: SkillsFormProps) {
             label="Skill Name"
             value={skill.name}
             onChange={(value) => handleChange(skill.id, "name", value)}
+            onBlur={(value) => validate(skill.id, value)}
+            error={errors[skill.id]}
             placeholder="TypeScript"
           />
 

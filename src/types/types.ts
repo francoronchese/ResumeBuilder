@@ -1,12 +1,7 @@
 // Shared types used across the application
 
 // Font types
-export type Font =
-  | "Inter"
-  | "Arimo"
-  | "Caladea"
-  | "Cabin"
-  | "Merriweather";
+export type Font = "Inter" | "Arimo" | "Caladea" | "Cabin" | "Merriweather";
 
 export type FontOption = {
   value: Font;
@@ -27,71 +22,4 @@ export type Section = {
   id: string;
   label: string;
   enabled: boolean;
-};
-
-// Personal information types
-export type PersonalInfo = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  location: string;
-  linkedin?: string;
-  github?: string;
-  website?: string;
-};
-
-// Work experience type
-export type WorkExperience = {
-  id: string;
-  company: string;
-  position: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  current: boolean;
-  description: string;
-};
-
-// Education type
-export type Education = {
-  id: string;
-  institution: string;
-  degree: string;
-  fieldOfStudy: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  current: boolean;
-  gpa?: string;
-  description?: string;
-};
-
-// Skill category type
-export type SkillCategory =
-  | "Programming Languages"
-  | "Frameworks & Libraries"
-  | "Databases"
-  | "Cloud Services"
-  | "Tools & DevOps"
-  | "Soft Skills"
-  | "Languages"
-  | "Other";
-
-// Skill type
-export type Skill = {
-  id: string;
-  name: string;
-  category: SkillCategory;
-};
-
-// Project type
-export type Project = {
-  id: string;
-  name: string;
-  description: string;
-  technologies: string;
-  url?: string;
-  startDate?: string;
-  endDate?: string;
 };

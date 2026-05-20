@@ -1,16 +1,14 @@
 // Global resume state store with auto-save via localStorage
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import type { Font, ColorScheme, Section } from "../types/types";
 import type {
-  Font,
-  ColorScheme,
-  Section,
   PersonalInfo,
   WorkExperience,
   Education,
   Skill,
   Project,
-} from "../types/types";
+} from "../lib/schemas";
 import { DEFAULT_SECTIONS, DEFAULT_PERSONAL_INFO } from "../constants";
 
 type ResumeState = {
